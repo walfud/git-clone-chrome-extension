@@ -1,0 +1,9 @@
+{
+  "name": "com.walfud.git_clone",
+  "description": "git clone   [https|ssh]://..../xxx   $Project/xxx",
+  "path" : "/Users/walfud/Library/Application Support/Google/Chrome/NativeMessagingHosts/NativeBridge",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://jjlkdighhndphloegfedehdjhgmonkml/"
+  ]
+}

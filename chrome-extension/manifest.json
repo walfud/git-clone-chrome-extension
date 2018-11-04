@@ -1,0 +1,49 @@
+{
+    "manifest_version": 2,
+    "name": "GitClone",
+    "description": "Call 'git clone' to your local directory",
+    "version": "1.0",
+    "author": "hi@walfud.com",
+    "icons": {
+        "16": "icon128.png",
+        "48": "icon128.png",
+        "128": "icon128.png"
+    },
+    "commands": {
+        "_execute_browser_action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+C"
+            }
+        }
+    },
+    "permissions": [
+        "tabs",
+        "storage",
+        "declarativeContent",
+        "downloads",
+        "notifications",
+        "nativeMessaging"
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": false
+    },
+    "page_action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "32": "icon128.png"
+        }
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://gthub.com/*/**"
+            ],
+            "js": [
+                "contentScript.js"
+            ]
+        }
+    ]
+}
