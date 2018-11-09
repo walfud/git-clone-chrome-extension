@@ -1,0 +1,37 @@
+{
+  "name": "git-clone-chrome-extension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "webpack --config ./webpack.dev.config.js --mode development",
+    "clean": "rm -rf ./package/popup.js ./package/popup.js.map",
+    "build": "webpack --config ./webpack.config.js --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/walfud/git-clone-chrome-extension.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/walfud/git-clone-chrome-extension/issues"
+  },
+  "homepage": "https://github.com/walfud/git-clone-chrome-extension#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  },
+  "dependencies": {
+    "react": "^16.6.0",
+    "react-beautiful-dnd": "^9.0.2",
+    "react-dom": "^16.6.0"
+  }
+}
