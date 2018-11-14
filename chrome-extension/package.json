@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "webpack --config ./webpack.dev.config.js --mode development",
-    "clean": "rm -rf ./package/popup.js ./package/popup.js.map",
-    "build": "webpack --config ./webpack.config.js --mode production"
+    "build:dev": "webpack --config ./webpack.dev.config.js --mode development",
+    "build": "webpack --config ./webpack.config.js --mode production",
+    "clean": "rm -rf ./package/popup.js ./package/popup.js.map"
   },
   "repository": {
     "type": "git",
