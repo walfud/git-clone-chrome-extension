@@ -22,16 +22,16 @@ class App extends Component {
   constructor() {
     super()
 
-    ;(async () => {
-      try {
-        this.setState({
-          url: (await this.background.getUrl()) || '',
-          targets: (await this.background.retrieve()) || [],
-        })
-      } catch (err) {
-        console.log(err.message)
-      }
-    })()
+      ; (async () => {
+        try {
+          this.setState({
+            url: (await this.background.getUrl()) || '',
+            targets: (await this.background.retrieve()) || [],
+          })
+        } catch (err) {
+          console.log(err.message)
+        }
+      })()
   }
 
   render() {
@@ -87,7 +87,7 @@ class App extends Component {
       try {
         await this.background.save(newTargets)
         this.setState({
-          err: "saved!"
+          err: "reorder: saved!"
         })
       } catch (err) {
         this.setState({
@@ -97,14 +97,11 @@ class App extends Component {
     })
   }
 
-  onClickAuto = event => {
-    console.log("auto")
-  }
   renderAuto() {
     for (let i of this.state.targets) {
       if (this.state.url.match(i.pattern)) {
         return (
-          <button ref={r => this.refAddBtn = r} onClick={this.onClickAuto}>{`Auto: ${i.target}`}</button>
+          <button ref={r => this.refAddBtn = r} onClick={() => this.background.runNativeGit(this.state.url, i.localDir)}>{`Auto: ${i.localDir}`}</button>
         )
       }
     }
@@ -129,7 +126,7 @@ class App extends Component {
       addProtocolValue: event.target.value
     })
   }
-  onAdd = event => {
+  onAdd = async event => {
     if (!this.state.addPatternValue) {
       this.setState(
         {
@@ -166,31 +163,52 @@ class App extends Component {
       return
     }
 
-    this.setState({
-      targets: [
+    // Persistense
+    try {
+      const newTargets = [
         ...this.state.targets,
         {
           pattern: this.state.addPatternValue,
           localDir: this.state.addLocalDirValue,
-          protocol: this.state.addProtocolValue
-        }
+          protocol: this.state.addProtocolValue,
+        },
       ]
-    })
+      await this.background.save(newTargets)
+      this.setState({
+        targets: newTargets,
+        err: "add: saved!",
+      })
 
-    // Reset
-    this.setState(
-      {
+      // Reset
+      this.setState({
         addPatternValue: "",
         addLocalDirValue: "",
         addProtocolValue: "",
-
-        err: ""
-      },
-      () => {
+      }, () => {
         this.refAddPattern && this.refAddPattern.focus()
-      }
-    )
+      })
+    } catch (err) {
+      this.setState({
+        err: err.message,
+      })
+    }
   }
+  onDel = async target => {
+    // Persistense
+    try {
+      const newTargets = this.state.targets.filter(x => x !== target)
+      await this.background.save(newTargets)
+      this.setState({
+        targets: newTargets,
+        err: "del: saved!",
+      })
+    } catch (err) {
+      this.setState({
+        err: err.message,
+      })
+    }
+  }
+
   renderAdd() {
     return (
       <div
@@ -230,7 +248,15 @@ class App extends Component {
   }
   renderTargetItem(target) {
     return (
-      <label onClick={_ => this.onTargetClick(target)}>{target.localDir}</label>
+      <div style={{
+        flex: 1,
+        flex: 'row',
+        justifyContent: 'space-between',
+      }}>
+      <button onClick={_ => this.onDel(target)}>移除</button>
+        <label onClick={_ => this.onTargetClick(target)}>{target.localDir}</label>
+        <button onClick={_ => this.background.runNativeGit(this.state.url, target.localDir)}>clone</button>
+      </div>
     )
   }
   renderTargetList() {

@@ -31,17 +31,20 @@ fn main() {
         "msg": &msg,
     }).to_string());
 
-
-    //
+    // Run command
     let args: Vec<String> = serde_json::from_str(&msg).unwrap();
     let mut command = Command::new(&args[0]);
     for arg in &args[1..] {
         command.arg(&arg);
     }
-    let status = command.status().unwrap();
+    let output = command.output().expect("Failed to execute command");
+
+    // Response to chrome
     send_back(&json!({
         "id": ID_DATA,
-        "code": &status.code(),
+        "code": &output.status.code(),
+        "stdout": String::from_utf8_lossy(&output.stdout),
+        "stderr": String::from_utf8_lossy(&output.stderr),
     }).to_string());
 }
 

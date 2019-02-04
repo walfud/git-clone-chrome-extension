@@ -35,11 +35,17 @@ function runNativeGit(url, localDir) {
   const port = chrome.runtime.connectNative("com.walfud.git_clone");
   port.onMessage.addListener(msg => {
     console.log(msg);
-  });
+  })
   port.onDisconnect.addListener(() => {
     console.log("Disconnected");
-  });
-  port.postMessage(['git', 'clone', url, localDir]);
+  })
+
+  const part = url.split('/')
+  let filename = part[part.length - 1]
+  if (filename.indexOf('.') !== -1) {
+    filename = filename.substring(0, filename.indexOf('.'))
+  }
+  port.postMessage(['git', 'clone', url, `${localDir}/${filename}`])
 }
 
 function save(targets) {
